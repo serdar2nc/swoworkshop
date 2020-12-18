@@ -63,7 +63,7 @@ jobs:
   openshift-cd:
     name: CD
     runs-on: ubuntu-20.04
-
+    needs: openshift-ci
     steps:
     - uses: actions/checkout@v2
     - name: Log in to OpenShift
