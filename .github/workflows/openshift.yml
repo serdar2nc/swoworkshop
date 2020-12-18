@@ -1,9 +1,9 @@
 name: OpenShift
 
 env:
-  REGISTRY: quay.io/user/serdar2nc
+  REGISTRY: quay.io/serdar2nc
   REGISTRY_USER: serdar2nc
-  REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+  REGISTRY_PASSWORD: ${{ secrets.QUAY_PASSWORD }}
 
   OPENSHIFT_SERVER: ${{ secrets.OPENSHIFT_SERVER }}
   OPENSHIFT_TOKEN: ${{ secrets.OPENSHIFT_TOKEN }}
