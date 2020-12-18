@@ -12,6 +12,7 @@ env:
 
   OPENSHIFT_NAMESPACE: ""
 
+
   APP_NAME: reversewords
   TAG: workshop
 
@@ -60,10 +61,24 @@ jobs:
         registry: ${{ env.REGISTRY }}
         username: ${{ env.REGISTRY_USER }}
         password: ${{ env.REGISTRY_PASSWORD }}
-  openshift-cd:
-    name: CD
+  openshift-cd-stage:
+    name: CD-stage
     runs-on: ubuntu-20.04
     needs: openshift-ci
+    steps:
+    - uses: actions/checkout@v2
+    - name: Log in to OpenShift
+      uses: redhat-actions/oc-login@v1
+      with:
+        openshift_server_url: ${{ env.OPENSHIFT_SERVER }}
+        openshift_token: ${{ env.OPENSHIFT_TOKEN }}
+        insecure_skip_tls_verify: true
+        namespace: ${{ env.OPENSHIFT_NAMESPACE }}
+
+  openshift-cd-prod:
+    name: CD-prod
+    runs-on: ubuntu-20.04
+    #needs: openshift-ci
     steps:
     - uses: actions/checkout@v2
     - name: Log in to OpenShift
