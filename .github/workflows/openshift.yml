@@ -23,8 +23,8 @@ on:
       
 
 jobs:
-  openshift-ci-cd:
-    name: Build and deploy to OpenShift
+  openshift-ci:
+    name: Build
     runs-on: ubuntu-20.04
 
     steps:
@@ -51,8 +51,6 @@ jobs:
         # Otherwise, point this to your Dockerfile relative to the repository root.
         dockerfiles: |
           ./Dockerfile
-
-    # https://github.com/redhat-actions/push-to-registry#readme
     - name: Push to registry
       id: push-to-registry
       uses: redhat-actions/push-to-registry@v1
@@ -62,14 +60,12 @@ jobs:
         registry: ${{ env.REGISTRY }}
         username: ${{ env.REGISTRY_USER }}
         password: ${{ env.REGISTRY_PASSWORD }}
+  openshift-cd:
+    name: CD
+    runs-on: ubuntu-20.04
 
-    # The path the image was pushed to is now stored in ${{ steps.push-to-registry.outputs.registry-path }}
-
-    # oc-login works on all platforms, but oc must be installed first.
-    # The GitHub Ubuntu runner already includes oc.
-    # Otherwise, https://github.com/redhat-actions/oc-installer#readme is available.
-
-    # https://github.com/redhat-actions/oc-login#readme
+    steps:
+    - uses: actions/checkout@v2
     - name: Log in to OpenShift
       uses: redhat-actions/oc-login@v1
       with:
