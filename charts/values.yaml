@@ -1,1 +1,13 @@
-TAG: SERDAR
+# UI controll
+title: "Welcome to Github Actions with OCP Workshop"
+wild_card_dns: "apps.n3ztso2x.westeurope.aroapp.io"
+
+# Service controlls
+serviceName: reverse-words
+serviceType: ClusterIP
+servicePort: 8080
+
+#deployment controlls
+environment: stage
+tag: latest
+namespace: stage
