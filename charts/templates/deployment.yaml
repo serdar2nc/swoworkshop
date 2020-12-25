@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reverse-words-{{ .Values.environment }}
+  labels:
+    app: reverse-words-{{ .Values.environment }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: reverse-words-{{ .Values.environment }}
+  template:
+    metadata:
+      labels:
+        app: reverse-words-{{ .Values.environment }}
+    spec:
+      containers:
+      - name: reverse-words
+        image: quay.io/altugyildirim/reversewords:{{ .Values.tag }}
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+        - name: RELEASE
+          value: "{{ .Values.environment }} - release and {{ .Values.title }}"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 5
+          timeoutSeconds: 2
+          periodSeconds: 15
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 10
+          timeoutSeconds: 2
+          periodSeconds: 15
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: {{ .Values.serviceName }}-{{ .Values.environment }}
+  name: {{ .Values.serviceName }}-{{ .Values.environment }}
+  namespace: {{ .Values.namespace }}
+spec:
+  ports:
+  - port: {{ .Values.servicePort }}
+    protocol: TCP
+    targetPort: http
+    name: http
+  selector:
+    app: reverse-words-{{ .Values.environment }}
+  type: {{ .Values.serviceType }}
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: reverse-words-{{ .Values.environment }}-route
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: reverse-words-{{ .Values.environment }}
+spec:
+  host: reversewords-{{ .Values.environment }}.{{ .Values.wild_card_dns }}
+  to:
+    kind: Service
+    name: reverse-words-{{ .Values.environment }}
+    weight: 100
+  port:
+    targetPort: http
+  wildcardPolicy: None
