@@ -87,7 +87,7 @@ jobs:
 
     - name: Helm
       run: |
-        helm upgrade -f ./charts/values.yaml reverseword-stage ./charts --set environment=stage --set namespace=reverse-word-stage --set tag=${{ env.TAG}} -n helm-charts
+        helm upgrade -f ./charts/values.yaml reverseword-stage ./charts --set environment=stage --set namespace=reverse-word-stage-serdar --set tag=${{ env.TAG}} -n helm-charts
 
   openshift-cd-prod:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
