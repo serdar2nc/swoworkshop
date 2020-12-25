@@ -122,4 +122,3 @@ jobs:
        pr_body: ":crown: *An automated PR*"
        pr_label: "auto-pr"
        github_token: ${{ env.TOKEN }}
-
