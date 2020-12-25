@@ -29,6 +29,12 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Unit Test
+      run: |
+        docker build -t reverseword_test:latest -f Dockerfile.test .
+        docker images
+        docker run reverseword_test:latest
+        
     - name: Determine app name
       if: env.APP_NAME == ''
       run: |
@@ -87,7 +93,7 @@ jobs:
 
     - name: Helm
       run: |
-        helm upgrade -f ./charts/values.yaml reverseword-stage ./charts --set environment=stage --set namespace=reverse-word-stage-serdar --set tag=${{ env.TAG}} -n helm-charts
+        helm upgrade -f ./charts/values.yaml reverseword-stage ./charts --set environment=stage --set namespace=reverse-word-stage --set tag=${{ env.TAG}} -n helm-charts
 
   openshift-cd-prod:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -106,7 +112,7 @@ jobs:
 
     - name: Helm
       run: |
-        helm upgrade -f ./charts/values.yaml reverseword ./charts --set environment=prod --set namespace=reverse-word-prod-serdar --set tag=${{ env.TAG }} -n helm-charts
+        helm upgrade -f ./charts/values.yaml reverseword ./charts --set environment=prod --set namespace=reverse-word-prod --set tag=${{ env.TAG }} -n helm-charts
   pull-request:
    if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
    runs-on: ubuntu-latest
