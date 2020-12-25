@@ -106,7 +106,7 @@ jobs:
 
     - name: Helm
       run: |
-        helm upgrade -f ./charts/values.yaml reverseword ./charts --set environment=prod --set namespace=reverse-word-prod --set tag=${{ env.TAG }} -n helm-charts
+        helm upgrade -f ./charts/values.yaml reverseword ./charts --set environment=prod --set namespace=reverse-word-prod-serdar --set tag=${{ env.TAG }} -n helm-charts
   pull-request:
    if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
    runs-on: ubuntu-latest
