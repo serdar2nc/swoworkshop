@@ -29,6 +29,12 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Unit Test
+      run: |
+        docker build -t reverseword_test:latest -f Dockerfile.test .
+        docker images
+        docker run reverseword_test:latest
+        
     - name: Determine app name
       if: env.APP_NAME == ''
       run: |

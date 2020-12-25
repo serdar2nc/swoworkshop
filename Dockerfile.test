@@ -1,0 +1,5 @@
+FROM golang:latest
+WORKDIR /go/src/github.com/altugyildirim/devsecops_swoworkshop/
+COPY . .
+RUN go get github.com/gorilla/mux && go get github.com/prometheus/client_golang/prometheus/promhttp
+ENTRYPOINT ["go", "test", "-v", "./...", "-coverprofile", "cover.out"]
